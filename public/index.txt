@@ -1,0 +1,334 @@
+let socket;
+let userName;
+let roomID;
+
+// Function to join the chat room
+function joinChat() {
+  userName = document.getElementById('nameInput').value.trim();
+  roomID = document.getElementById('roomInput').value.trim();
+
+  if (userName && roomID) {
+    document.getElementById('joinForm').style.display = 'none';
+    document.getElementById('chatContainer').style.display = 'block';
+
+    // Connect to Socket.io server
+    socket = io();
+
+    // Emit 'join' event to server
+    socket.emit('join', { userName, roomID });
+
+    // Update UI with username and roomID
+    document.getElementById('usernameDisplay').innerText += userName;
+    document.getElementById('roomIDDisplay').innerText += roomID;
+
+    // Listen for 'userList' event from server
+    socket.on('userList', (users) => {
+      updateUserList(users);
+    });
+    // Listen for incoming chat messages
+
+// Assume the socket variable and other functions are defined as per your original code
+
+// Listen for incoming chat messages
+socket.on('chat-message', (data) => {
+  const { userName, message } = data;
+  console.log('Received message:', data); // Check if messages are received correctly
+  displayMessage(`${userName}: ${message}`);
+});
+  }
+}
+
+function leaveRoom() {
+  // Reload the page
+  window.location.reload();
+}
+
+function updateUserList(users) {
+  const userListElement = document.getElementById('userList');
+
+  // Clear previous user list
+  userListElement.innerHTML = '';
+
+  // Loop through each user and create list item
+  users.forEach(user => {
+    const userItem = document.createElement('div');
+    userItem.classList.add('user-item');
+    userItem.classList.add(user.status === 'online' ? 'online' : 'offline'); // Add online/offline class based on user status
+
+    const userStatus = document.createElement('span');
+    userStatus.classList.add('user-status');
+    userStatus.style.backgroundColor = user.status === 'online' ? 'green' : 'red'; // Assuming 'status' is provided by the server
+
+    const username = document.createElement('span');
+    username.classList.add('username');
+    username.textContent = user.userName; // Corrected from user.name
+
+    userItem.appendChild(userStatus);
+    userItem.appendChild(username);
+
+    userListElement.appendChild(userItem);
+  });
+}
+
+// Event listener for form submission
+document.getElementById('form').addEventListener('submit', (e) => {
+  e.preventDefault();
+  console.log('Submit') // Prevent the default form submission behavior
+
+  const message = document.getElementById('input').value.trim();
+  if (message) {
+    // Emit 'chat message' event to server
+    socket.emit('chat-message', message);
+    console.log('Submit',message) 
+    document.getElementById('input').value = '';
+  }
+});
+
+// Function to display chat messages
+function displayMessage(msg) {
+  console.log('Received message:', msg); // Check if messages are received
+
+  const item = document.createElement('li');
+  item.textContent = msg;
+
+  const messageList = document.getElementById('messages');
+  if (messageList) {
+    messageList.appendChild(item);
+  } else {
+    console.error('Message list not found');
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+let socket;
+let userName;
+let roomID;
+
+// Function to join the chat room
+function joinChat() {
+  userName = document.getElementById('nameInput').value.trim();
+  roomID = document.getElementById('roomInput').value.trim();
+
+  if (userName && roomID) {
+    document.getElementById('joinForm').style.display = 'none';
+    document.getElementById('chatContainer').style.display = 'block';
+
+    // Connect to Socket.io server
+    socket = io();
+
+    // Emit 'join' event to server
+    socket.emit('join', { userName, roomID });
+
+    // Update UI with username and roomID
+    document.getElementById('usernameDisplay').innerText += userName;
+    document.getElementById('roomIDDisplay').innerText += roomID;
+
+    // Listen for 'userList' event from server
+    socket.on('userList', (users) => {
+      updateUserList(users);
+    });
+    // Listen for incoming chat messages
+
+// Assume the socket variable and other functions are defined as per your original code
+
+// Listen for incoming chat messages
+socket.on('chat-message', (data) => {
+  const { userName, message } = data;
+  console.log('Received message:', data); // Check if messages are received correctly
+  displayMessage(`${userName}: ${message}`);
+});
+  }
+}
+
+function leaveRoom() {
+  // Reload the page
+  window.location.reload();
+}
+
+function updateUserList(users) {
+  const userListElement = document.getElementById('userList');
+
+  // Clear previous user list
+  userListElement.innerHTML = '';
+
+  // Loop through each user and create list item
+  users.forEach(user => {
+    const userItem = document.createElement('div');
+    userItem.classList.add('user-item');
+    userItem.classList.add(user.status === 'online' ? 'online' : 'offline'); // Add online/offline class based on user status
+
+    const userStatus = document.createElement('span');
+    userStatus.classList.add('user-status');
+    userStatus.style.backgroundColor = user.status === 'online' ? 'green' : 'red'; // Assuming 'status' is provided by the server
+
+    const username = document.createElement('span');
+    username.classList.add('username');
+    username.textContent = user.userName; // Corrected from user.name
+
+    userItem.appendChild(userStatus);
+    userItem.appendChild(username);
+
+    userListElement.appendChild(userItem);
+  });
+}
+
+// Event listener for form submission
+document.getElementById('form').addEventListener('submit', (e) => {
+  e.preventDefault();
+  console.log('Submit') // Prevent the default form submission behavior
+
+  const message = document.getElementById('input').value.trim();
+  if (message) {
+    // Emit 'chat message' event to server
+    socket.emit('chat-message', message);
+    console.log('Submit',message) 
+    document.getElementById('input').value = '';
+  }
+});
+
+// Function to display chat messages
+function displayMessage(msg) {
+  console.log('Received message:', msg); // Check if messages are received
+
+  const item = document.createElement('li');
+  item.textContent = msg;
+
+  const messageList = document.getElementById('messages');
+  if (messageList) {
+    messageList.appendChild(item);
+  } else {
+    console.error('Message list not found');
+  }
+}
+ 
+
+
+
+
+
+
+
+ client........................................................................
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+const express = require('express');
+const app = express();
+const http = require('http').Server(app);
+const io = require('socket.io')(http);
+
+// Store room-based user lists
+const roomUsers = {};
+
+io.on('connection', (socket) => {
+  console.log('a user connected');
+
+  // Listen for 'join' event
+  socket.on('join', ({ userName, roomID }) => {
+    socket.join(roomID); // Join the specified room
+
+    // Add user to the room's user list
+    if (!roomUsers[roomID]) {
+      roomUsers[roomID] = [];
+    }
+    roomUsers[roomID].push({ name: userName, status: 'online' });
+
+    // Emit the updated user list for the room to all clients in the room
+    io.to(roomID).emit('userList', roomUsers[roomID]);
+
+    console.log(`${userName} joined room ${roomID}`);
+  });
+
+  // Listen for 'chat message' event
+
+
+
+
+
+  socket.on('chat-message', (message) => {
+    const roomID = Array.from(socket.rooms)[1]; // Assuming you want to broadcast to the second room
+    io.to(roomID).emit('chat-message', { userName: socket.userName, message });
+  });
+  
+
+  socket.on('chat-message', (message) => {
+    const { userName, roomID } = socket.data;
+    io.to(roomID).emit('chat-message', { userName, message });
+  });
+
+  // Handle user disconnection
+  socket.on('disconnect', () => {
+    console.log('a user disconnected');
+
+    // Remove the user from the appropriate room's user list
+    const rooms = Array.from(socket.rooms);
+    rooms.forEach((roomID) => {
+      if (roomID !== socket.id && roomUsers[roomID]) {
+        const userIndex = roomUsers[roomID].findIndex((user) => user.name === socket.userName);
+        if (userIndex !== -1) {
+          roomUsers[roomID].splice(userIndex, 1);
+          io.to(roomID).emit('userList', roomUsers[roomID]); // Update user list for all clients in the room
+        }
+      }
+    });
+  });
+});
+
+// Serve the static files from the 'public' directory
+app.use(express.static('public'));
+
+// Start the server
+const PORT = process.env.PORT || 3000;
+http.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
+});
+
+
+
+
+
+
+
+
